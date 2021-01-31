@@ -246,12 +246,12 @@ impl Channel {
 		#[cfg(feature = "debug")]
 		{
 			println!(
-				"channel: lookup : client_to_engine found {:p}",
-				client_to_engine.get_ptr()
+				"channel: lookup : to_engine found {:p}",
+				to_engine.get_ptr()
 			);
 			println!(
-				"channel: lookup : engine_to_client found {:p}",
-				engine_to_client.get_ptr()
+				"channel: lookup : to_packetiser found {:p}",
+				to_packetiser.get_ptr()
 			);
 		}
 		Ok(Self {

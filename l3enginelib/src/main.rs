@@ -34,11 +34,11 @@ fn handle_signal(kr: Arc<AtomicBool>) {
 }
 
 /// Get packets from the outside world
-fn recv_pkts(ports: &Vec<Port>) -> usize {
+fn recv_pkts(port: &Port) -> usize {
 	let queue_id = unsafe { dpdk_sys::_rte_lcore_id() as u16 };
 	let ring_pkts = TO_PACKETISER.get();
 	let sz = ring_pkts.capacity() - ring_pkts.len();
-	let pkts = ports[0].receive(queue_id, sz);
+	let pkts = port.receive(queue_id, sz);
 	let len = pkts.len();
 
 	for pkt in pkts {
@@ -72,7 +72,7 @@ fn send_to_packetiser() -> usize {
 }
 
 /// Get packets from the packetiser
-fn transmit_pkts(port: Port) -> usize {
+fn transmit_pkts(port: &Port) -> usize {
 	let out_pkts = FROM_PACKETISER.get();
 
 	if out_pkts.is_empty() {
@@ -185,6 +185,14 @@ fn main() {
 	#[cfg(feature = "debug")]
 	println!("main: secondary started");
 	while kr.load(Ordering::SeqCst) {
-
+		let _rsz = recv_pkts(&ports[0]);
+		#[cfg(feature = "debug")]
+		println!("Received {} packets", _rsz);
+		let _ssz = send_to_packetiser();
+		#[cfg(feature = "debug")]
+		println!("Sent {} packets to packetiser", _ssz);
+		let _tsz = transmit_pkts(&ports[0]);
+		#[cfg(feature = "debug")]
+		println!("Received {} packets", _rsz);
 	}
 }
