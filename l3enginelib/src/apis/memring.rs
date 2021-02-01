@@ -135,7 +135,7 @@ impl Ring {
 	}
 
 	/// Enqueue a single packet onto the ring
-	pub fn enqueue_bulk(&self, mut pkts: Vec<Mbuf>) -> usize {
+	pub fn enqueue_bulk(&self, pkts: &mut Vec<Mbuf>) -> usize {
 		#[cfg(feature = "debug")]
 		println!("starting channel enqueue");
 		let mut ptrs = Vec::with_capacity(pkts.len());
@@ -281,7 +281,7 @@ impl Channel {
 	}
 
 	/// Send bulk to packetiser
-	pub fn send_to_packetiser_bulk(&self, pkts: Vec<Mbuf>) -> usize {
+	pub fn send_to_packetiser_bulk(&self, pkts: &mut Vec<Mbuf>) -> usize {
 		self.to_packetiser.enqueue_bulk(pkts)
 	}
 
@@ -291,7 +291,7 @@ impl Channel {
 	}
 
 	/// Send bulk to engine
-	pub fn send_to_engine_bulk(&self, pkts: Vec<Mbuf>) -> usize {
+	pub fn send_to_engine_bulk(&self, pkts: &mut Vec<Mbuf>) -> usize {
 		self.to_engine.enqueue_bulk(pkts)
 	}
 

@@ -166,9 +166,9 @@ impl Port {
 	}
 
 	/// Send packets out of the port
-	pub fn send(&self, pkts: Vec<Mbuf>, queue_id: u16) -> usize {
+	pub fn send(&self, pkts: &Vec<Mbuf>, queue_id: u16) -> usize {
 		let len = pkts.len();
-		let mut ptrs = pkts.into_iter().map(Mbuf::into_ptr).collect::<Vec<_>>();
+		let mut ptrs = pkts.into_iter().map(Mbuf::get_ptr).collect::<Vec<_>>();
 
 		let count = unsafe {
 			dpdk_sys::_rte_eth_tx_burst(
