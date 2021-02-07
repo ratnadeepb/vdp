@@ -65,11 +65,6 @@ unsafe impl Send for Mbuf {}
 impl Mbuf {
 	pub fn new(mp: &Mempool) -> Result<Self, MemoryError> {
 		let mempool = mp.get_ptr();
-		// match mp.try_get() {
-		// 	Some(mp) => mempool = mp.get_ptr(),
-		// 	None => return Err(MemoryError::BadVal),
-		// };
-
 		let r = unsafe { dpdk_sys::_rte_pktmbuf_alloc(mempool) };
 		match NonNull::new(r) {
 			Some(raw) => Ok(Self { raw }),

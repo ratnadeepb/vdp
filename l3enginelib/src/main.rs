@@ -1,6 +1,9 @@
-use l3enginelib::{Channel, Mbuf, Mempool, Port, eal_cleanup, eal_init};
-use std::{sync::{Arc, atomic::{AtomicBool, Ordering}}};
+use l3enginelib::{eal_cleanup, eal_init, Channel, Mbuf, Mempool, Port};
 use log;
+use std::{sync::{
+	atomic::{AtomicBool, Ordering},
+	Arc,
+}};
 use zmq::Context;
 
 const G_MEMPOOL_NAME: &str = "GLOBAL_MEMPOOL";
@@ -55,7 +58,7 @@ fn main() {
 		String::from("-n 4"),
 		String::from("--proc-type=primary"),
 		String::from("--base-virtaddr=0x7f000000000"),
-		String::from("--"),`
+		String::from("--"),
 		String::from("-p 3"),
 		String::from("-n 2"),
 	];
@@ -108,12 +111,12 @@ fn main() {
 
 	// handling Ctrl+C
 	let keep_running = Arc::new(AtomicBool::new(true));
-	let kr = keep_running.clone();
+	// let kr = keep_running.clone();
 	handle_signal(keep_running.clone());
 
 	#[cfg(feature = "debug")]
 	println!("main: secondary started");
-	while kr.load(Ordering::SeqCst) {
+	while keep_running.load(Ordering::SeqCst) {
 		let _rsz = recv_pkts(&port, &mut in_pkts, &channel);
 		#[cfg(feature = "debug")]
 		println!("Received {} packets", _rsz);

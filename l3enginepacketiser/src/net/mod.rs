@@ -1,3 +1,0 @@
-mod device;
-
-use device::*;
