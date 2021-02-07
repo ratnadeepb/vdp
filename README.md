@@ -15,8 +15,8 @@ Design heavily influenced by Capsule (Rust crate) and openNetVM.
 
 ## Future Work
 
-- Implement a L3/L4 network stack for `l3enginemux` (and security functions)
-- Implement a L7 filter stack for `client-container` (and security functions)
+- Implement an L3/L4 network stack for `l3enginemux` (and security functions)
+- Implement an L7 filter stack for `client-container` (and security functions)
 - Test everything exhaustively
 
 ## Known Issue
